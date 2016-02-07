@@ -38,6 +38,7 @@ private:
     QStringList     m_nameFilter;
 
     virtual void keyPressEvent(QKeyEvent* ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
     void showMedia(int currentFile);
 
 private slots:

@@ -46,17 +46,7 @@ void Widget::keyPressEvent(QKeyEvent* ev)
     QWidget::keyPressEvent(ev);
     if (ev -> key() == Qt::Key_Escape)
     {
-        if (isFullScreen())
-        {
-            showMaximized();
-            m_menuBar->show();
-        }
-        else
-        {
-            showFullScreen();
-            m_menuBar->hide();
-        }
-        showMedia(m_currentFile);
+        QApplication::quit();
     }
     if (ev -> key() == Qt::Key_Right)
     {
@@ -74,6 +64,25 @@ void Widget::keyPressEvent(QKeyEvent* ev)
             m_currentFile--;
         showMedia(m_currentFile);
     }
+}
+
+
+
+
+
+void Widget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (isFullScreen())
+    {
+        showMaximized();
+        m_menuBar->show();
+    }
+    else
+    {
+        showFullScreen();
+        m_menuBar->hide();
+    }
+    showMedia(m_currentFile);
 }
 
 
