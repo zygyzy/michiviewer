@@ -22,3 +22,5 @@ HEADERS  += widget.h \
 
 FORMS    += widget.ui \
     mediawidget.ui
+
+RC_FILE = michiviewer.rc
