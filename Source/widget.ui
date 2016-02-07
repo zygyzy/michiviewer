@@ -75,7 +75,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string>MichiViewer</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

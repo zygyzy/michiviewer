@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MichiViewer
 TEMPLATE = app
 
+RC_FILE = michiviewer.rc
 
 SOURCES += main.cpp\
         widget.cpp \
@@ -23,4 +24,5 @@ HEADERS  += widget.h \
 FORMS    += widget.ui \
     mediawidget.ui
 
-RC_FILE = michiviewer.rc
+OTHER_FILES += \
+    michiviewer.rc
