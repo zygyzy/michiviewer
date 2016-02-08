@@ -16,10 +16,12 @@ RC_FILE = michiviewer.rc
 
 SOURCES += main.cpp\
         widget.cpp \
-    mediawidget.cpp
+    mediawidget.cpp \
+    utility.cpp
 
 HEADERS  += widget.h \
-    mediawidget.h
+    mediawidget.h \
+    utility.h
 
 FORMS    += widget.ui \
     mediawidget.ui

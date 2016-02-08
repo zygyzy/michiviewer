@@ -22,9 +22,6 @@ Widget::Widget(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
     connect(m_openFileAct, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(m_openDirAct, SIGNAL(triggered()), this, SLOT(openDir()));
     connect(m_openDirActRec, SIGNAL(triggered()), this, SLOT(openDirRec()));
-
-    m_nameFilter << "*.png" << "*.jpg" << "*.jpeg" << "*.bmp" << "*.gif" << "*.tif" << "*.tiff" << "*.tga"
-                 << "*.wmv" << "*.mp4" << "*.mpg" << "*.mpeg" << "*.avi" << "*.mov" << "*.mkv" << "*.ogg";
 }
 
 
@@ -50,7 +47,7 @@ void Widget::keyPressEvent(QKeyEvent* ev)
     }
     if (ev -> key() == Qt::Key_Right)
     {
-        if (m_currentFile == m_fileList.size()-1)
+        if (m_currentFile == m_playList.size()-1)
             m_currentFile = 0;
         else
             m_currentFile++;
@@ -59,7 +56,7 @@ void Widget::keyPressEvent(QKeyEvent* ev)
     if (ev -> key() == Qt::Key_Left)
     {
         if (m_currentFile == 0)
-            m_currentFile = m_fileList.size()-1;
+            m_currentFile = m_playList.size()-1;
         else
             m_currentFile--;
         showMedia(m_currentFile);
@@ -89,13 +86,13 @@ void Widget::mouseDoubleClickEvent(QMouseEvent *event)
 
 
 
-void Widget::initializeFile(QString file)
+void Widget::initializePlaylistWithFile(QString file)
 {
     if (!file.isEmpty())
     {
         m_currentFile = 0;
-        m_fileList.clear();
-        m_fileList.append(file);
+        m_playList.clear();
+        m_playList.append(file);
         showMedia(m_currentFile);
     }
     showMaximized();
@@ -105,39 +102,13 @@ void Widget::initializeFile(QString file)
 
 
 
-void Widget::initializeFolder(QString folder, bool recursively)
+void Widget::initializePlaylistWithFolder(QString folder, bool recursively)
 {
     if (!folder.isEmpty())
     {
         m_currentFile = 0;
-        m_fileList.clear();
-
-        if (recursively)
-        {
-            QDirIterator it(folder, QDirIterator::Subdirectories);
-            while(it.hasNext())
-            {
-                it.next();
-                foreach(QString suffix, m_nameFilter)
-                {
-                    suffix.remove(0,2);
-                    QString currentSuffix = it.fileInfo().completeSuffix();
-                    if(suffix.compare(currentSuffix, Qt::CaseInsensitive) == 0)
-                    {
-                        m_fileList.append(it.fileInfo().absoluteFilePath());
-                        break;
-                    }
-                }
-            }
-            m_fileList.sort(Qt::CaseInsensitive);
-        }
-        else
-        {
-            QDir dir(folder);
-            foreach(QString file, dir.entryList(m_nameFilter, QDir::Files))
-                m_fileList.append(folder + "\\" + file);
-        }
-
+        m_playList.clear();
+        m_playList = Utility::getPlaylist(folder, recursively);
         showMedia(m_currentFile);
     }
     showMaximized();
@@ -149,10 +120,10 @@ void Widget::initializeFolder(QString folder, bool recursively)
 
 void Widget::showMedia(int currentFile)
 {
-    if (m_fileList.size() > 0)
+    if (m_playList.size() > 0)
     {
-        this->setWindowTitle(this->m_fileList.at(currentFile));
-        m_mediaWidget->showMedia(this->m_fileList.at(currentFile));
+        this->setWindowTitle(this->m_playList.at(currentFile));
+        m_mediaWidget->showMedia(this->m_playList.at(currentFile));
     }
 }
 
@@ -163,7 +134,7 @@ void Widget::showMedia(int currentFile)
 void Widget::openDir()
 {
     QString dirName = QFileDialog::getExistingDirectory(this, "Open Directory", "", QFileDialog::ShowDirsOnly);
-    initializeFolder(dirName, false);
+    initializePlaylistWithFolder(dirName, false);
 }
 
 
@@ -173,7 +144,7 @@ void Widget::openDir()
 void Widget::openDirRec()
 {
     QString dirName = QFileDialog::getExistingDirectory(this, "Open Directory and Subdirectories", "", QFileDialog::ShowDirsOnly);
-    initializeFolder(dirName, true);
+    initializePlaylistWithFolder(dirName, true);
 }
 
 
@@ -183,5 +154,5 @@ void Widget::openDirRec()
 void Widget::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "Files (*.*)");
-    initializeFile(fileName);
+    initializePlaylistWithFile(fileName);
 }

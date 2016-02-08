@@ -10,6 +10,7 @@
 #include <QDirIterator>
 #include <QtAlgorithms>
 #include <mediawidget.h>
+#include "utility.h"
 
 namespace Ui {
 class Widget;
@@ -22,24 +23,23 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
-    void initializeFile(QString file);
-    void initializeFolder(QString folder, bool recursively);
+    void initializePlaylistWithFile(QString file);
 
 private:
     Ui::Widget      *ui;
     MediaWidget     *m_mediaWidget;
     qint64          m_currentFile;
-    QStringList     m_fileList;
+    QStringList     m_playList;
     QMenu           *m_menu;
     QMenuBar        *m_menuBar;
     QAction         *m_openDirAct;
     QAction         *m_openDirActRec;
     QAction         *m_openFileAct;
-    QStringList     m_nameFilter;
 
     virtual void keyPressEvent(QKeyEvent* ev);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     void showMedia(int currentFile);
+    void initializePlaylistWithFolder(QString folder, bool recursively);
 
 private slots:
 
